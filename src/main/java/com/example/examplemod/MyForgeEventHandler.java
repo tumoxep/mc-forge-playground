@@ -1,4 +1,4 @@
-package com.example.myforgeeventhandler;
+package com.example.examplemod;
 
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
