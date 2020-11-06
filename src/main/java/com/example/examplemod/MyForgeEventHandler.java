@@ -10,6 +10,7 @@ import net.minecraftforge.event.world.WorldEvent;
 @EventBusSubscriber
 public class MyForgeEventHandler {
 	public static long totalWorldTime = 0;
+	public static boolean messageSent = false;
 	
     @SubscribeEvent
     public static void worldLoad(WorldEvent.Load event) {
@@ -20,6 +21,10 @@ public class MyForgeEventHandler {
     public static void clientTick(TickEvent.ClientTickEvent event) {
     	if (Minecraft.getMinecraft().world == null) {
     		return;
+    	}
+    	if (!messageSent) {
+    		messageSent = true;
+    		Minecraft.getMinecraft().ingameGUI.setOverlayMessage("test", true);
     	}
     	long tickCheckWorldTime = Minecraft.getMinecraft().world.getTotalWorldTime();
     	if (tickCheckWorldTime == 0) {
