@@ -2,25 +2,33 @@ package com.example.examplemod;
 
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
-import net.minecraftforge.event.world.WorldEvent.Load;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.GameSettings.Options;
+import net.minecraftforge.event.world.WorldEvent;
 
 @EventBusSubscriber
 public class MyForgeEventHandler {
-	public long totalWorldTime = 0;
+	public static long totalWorldTime = 0;
 	
     @SubscribeEvent
-    public void worldLoad(Load event) {
+    public static void worldLoad(WorldEvent.Load event) {
         System.out.println("Hello world");
     }
 
     @SubscribeEvent
-    public void worldTick(WorldTickEvent event) {
-    	long tickCheckWorldTime = event.world.getTotalWorldTime();
-    	
+    public static void clientTick(TickEvent.ClientTickEvent event) {
+    	if (Minecraft.getMinecraft().world == null) {
+    		return;
+    	}
+    	long tickCheckWorldTime = Minecraft.getMinecraft().world.getTotalWorldTime();
+    	if (tickCheckWorldTime == 0) {
+    		return;
+    	}
     	if (totalWorldTime != tickCheckWorldTime) {
     		totalWorldTime = tickCheckWorldTime;
-    		System.out.println("time: " + totalWorldTime);
+    		Minecraft.getMinecraft().gameSettings.setOptionFloatValue(Options.GAMMA, (float)Math.sin(tickCheckWorldTime));
+    		Minecraft.getMinecraft().gameSettings.saveOptions();
     	}
     }
 }
